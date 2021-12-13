@@ -45,3 +45,33 @@ button:focus{
 button{
     outline: none;
 }
+label{
+    display: block;
+    text-align: center;
+  }
+input[type = file]::-webkit-file-upload-button {
+    visibility: hidden;
+}
+ input[type='file']::placeholder {
+    color:rgb(133,130,130);
+    opacity: 1;
+}
+.file-upload{
+    border: 2px solid #666666;
+}
+.file-upload input{
+    background: #e6e6e6;
+    border: none;
+    padding: 0px 26px 5px 26px !important;
+    font-size: 18px;
+}
+.file-upload input:focus{
+    box-shadow: none;
+    border: none;
+    background: #e6e6e6;
+}
+.file-upload label{
+    cursor: pointer;
+    font-size: 28px;
+    color: #646566;
+}

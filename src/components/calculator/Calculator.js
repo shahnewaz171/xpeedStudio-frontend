@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { FiUploadCloud } from "react-icons/fi";
 import './Calculator.css';
 
 const Calculator = () => {
@@ -61,10 +62,10 @@ const Calculator = () => {
             <h4 className="text-danger">Screen A</h4>
             <div className="row">
                 <div className="col col-md-6">
-                    <div className="mt-3 pb-5 calculator">
+                    <div className="mt-3 pb-2 calculator">
                         <div className="px-3 pb-4">
                             <h3 className="pt-3 pb-2">Total results: 03</h3>
-                            <div className="mt-1 py-2 rounded-3 result-card">
+                            <div className="mt-1 py-3 rounded-3 result-card">
                                 <p className="mb-0">
                                     <span>=24</span>
                                     <span className="fw-bolder">calculation title</span>
@@ -79,16 +80,15 @@ const Calculator = () => {
                                     <div className="col-9">
                                         <input type="text" onBlur={writtenText} name="writtenText" className="form-control" placeholder="Calculation Title" required />
                                     </div>
-                                    <div className="col-3 d-flex align-items-center">
-                                        <p className="text-dark mb-0 text-center">Required</p>
-                                    </div>
                                 </div>
-                                <div className="row pb-4">
+                                <div className="row pb-2">
                                     <div className="col-9">
-                                        <input type="file" onChange={handleFile} name="file" className="form-control" accept=".txt" required />
-                                    </div>
-                                    <div className="col-3 d-flex align-items-center">
-                                        <p className="text-dark mb-0 text-center">Optional</p>
+                                        <div className="file-upload">
+                                            <label htmlFor="file" className="pt-3">
+                                                <FiUploadCloud />
+                                            </label>
+                                            <input type="file" onChange={handleFile} name="file" id="file" className="form-control" accept=".txt" required />
+                                        </div>
                                     </div>
                                 </div>
                                 <button type="submit" className="btn rounded-pill px-4 calculator-btn">Calculate</button>
