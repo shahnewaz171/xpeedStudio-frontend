@@ -5,6 +5,7 @@
 .result-card{
     border: 2px solid #1a1a1a;
     border-radius: 15px;
+    background: #e6e6e6;
 }
 .result-card .preview-btn{
     background-color: rgb(90, 89, 89);
@@ -60,7 +61,7 @@ input[type = file]::-webkit-file-upload-button {
 .file-upload input{
     background: #e6e6e6;
     border: none;
-    padding: 0px 26px 5px 26px !important;
+    padding: 0px 26px 5px 0px !important;
     font-size: 18px;
 }
 .file-upload input:focus{
@@ -72,4 +73,24 @@ input[type = file]::-webkit-file-upload-button {
     cursor: pointer;
     font-size: 28px;
     color: #646566;
+}
+.file-upload svg{
+    margin-left: 10px;
+}
+.pagination ul li{
+    background-color: #000;
+    display: inline-block !important;
+    height: 13px;
+    width: 13px;
+    border-radius: 50%;
+    margin: 0px 4px;
+    
+}
+.pagination .white{
+    background-color: #ffff;
+    display: block;
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+    margin: 4px 4px;
 }

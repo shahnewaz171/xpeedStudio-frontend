@@ -4,6 +4,7 @@ import { FiUploadCloud } from "react-icons/fi";
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import './Calculator.css';
 import Card from '../Card/Card';
+import ResultCards from '../../ScreenB/ResultCards/ResultCards';
 
 const Calculator = () => {
     const [writtenValue, setWrittenValue] = useState('');
@@ -68,22 +69,22 @@ const Calculator = () => {
         e.preventDefault();
     }
 
-   const handleOnDragEnd = (result) => {
+    const handleOnDragEnd = (result) => {
         if (!result.destination) return;
-    
+
         const items = Array.from(resultsCard);
         const [reorderedItem] = items.splice(result.source.index, 1);
         items.splice(result.destination.index, 0, reorderedItem);
         console.log(items);
-    
+
         setResultsCard(items);
-      }
+    }
 
     return (
         <div className="my-5 container custom-container">
-            <h4 className="text-danger">Screen A</h4>
             <div className="row">
-                <div className="col col-md-6">
+                <div className="col col-md-5">
+                    <h4 className="text-danger">Screen A</h4>
                     <div className="mt-3 pb-2 calculator">
                         <div className="px-3 pb-4 upload">
                             <h3 className="pt-3 pb-2">Total results: {resultsCard.length}</h3>
@@ -91,7 +92,7 @@ const Calculator = () => {
                                 <Droppable droppableId="items">
                                     {(provided) => (
                                         <div className="items" {...provided.droppableProps} ref={provided.innerRef}>
-                                            {resultsCard.map((item, index) => <Card item={item} index={index} key={item._id} /> )}
+                                            {resultsCard.map((item, index) => <Card item={item} index={index} key={item._id} />)}
                                             {provided.placeholder}
                                         </div>
                                     )}
@@ -120,6 +121,10 @@ const Calculator = () => {
                             </form>
                         </div>
                     </div>
+                </div>
+                <div className="col-md-2"></div>
+                <div className="col col-md-5 pt-5">
+                    <ResultCards />
                 </div>
             </div>
         </div>
