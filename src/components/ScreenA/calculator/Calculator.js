@@ -2,15 +2,20 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FiUploadCloud } from "react-icons/fi";
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import './Calculator.css';
+import InfiniteScroll from "react-infinite-scroll-component";
 import Card from '../Card/Card';
 import ResultCards from '../../ScreenB/ResultCards/ResultCards';
+import SkeletonElement from '../../SkeletonElement';
+import './Calculator.css';
+import Paginate from '../../Paginate';
 
 const Calculator = () => {
     const [writtenValue, setWrittenValue] = useState('');
     const [fileValue, setFileValue] = useState('');
     const [file, setFile] = useState('');
     const [resultsCard, setResultsCard] = useState([]);
+    const [visible, setVisible] = useState(3);
+    const allResultsCard = resultsCard.slice(0, visible);
 
     useEffect(() => {
         axios.get('http://localhost:5000/results')
@@ -80,26 +85,42 @@ const Calculator = () => {
         setResultsCard(items);
     }
 
+    const fetchMoreData = () => {
+        setTimeout(() => {
+            setVisible(previousItems => previousItems + 3);
+        }, 1000);
+    };
+
     return (
         <div className="my-5 container custom-container">
             <div className="row">
                 <div className="col col-md-5">
                     <h4 className="text-danger">Screen A</h4>
-                    <div className="mt-3 pb-2 calculator">
-                        <div className="px-3 pb-4 upload">
+                    <div className="mt-3 calculator border1">
+                        <div id="scrollableDiv1" className="px-3 pb-4 upload">
                             <h3 className="pt-3 pb-2">Total results: {resultsCard.length}</h3>
                             <DragDropContext onDragEnd={handleOnDragEnd}>
                                 <Droppable droppableId="items">
                                     {(provided) => (
                                         <div className="items" {...provided.droppableProps} ref={provided.innerRef}>
-                                            {resultsCard.map((item, index) => <Card item={item} index={index} key={item._id} />)}
-                                            {provided.placeholder}
+                                            <InfiniteScroll
+                                                dataLength={allResultsCard.length}
+                                                next={fetchMoreData}
+                                                hasMore={true}
+                                                loader={allResultsCard.length === visible ? <SkeletonElement /> : false}
+                                                scrollableTarget="scrollableDiv1"
+                                            >
+                                                {allResultsCard.map((item, index) => <Card item={item} index={index} key={item._id} />)}
+                                            </InfiniteScroll>
                                         </div>
                                     )}
                                 </Droppable>
                             </DragDropContext>
+                           {allResultsCard.length === visible &&
+                               <Paginate />
+                           }
                         </div>
-                        <div className="mt-2">
+                        <div className="input-area">
                             <h3 className="px-3 py-2">Input</h3>
                             <form className="px-3" onSubmit={handleSubmit}>
                                 <div className="row mb-3">
@@ -117,7 +138,7 @@ const Calculator = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" className="btn rounded-pill px-4 calculator-btn">Calculate</button>
+                                <button type="submit" className="btn rounded-pill my-2 px-4 calculator-btn">Calculate</button>
                             </form>
                         </div>
                     </div>

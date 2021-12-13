@@ -3,10 +3,11 @@ import axios from 'axios';
 import InfiniteScroll from "react-infinite-scroll-component";
 import '../../ScreenA/calculator/Calculator';
 import SkeletonElement from '../../SkeletonElement';
+import Paginate from '../../Paginate';
 
 const ResultCards = () => {
     const [resultsCard, setResultsCard] = useState([]);
-    const [visible, setVisible] = useState(3);
+    const [visible, setVisible] = useState(4);
     const allResultsCard = resultsCard.slice(0, visible);
 
     useEffect(() => {
@@ -26,19 +27,15 @@ const ResultCards = () => {
     return (
         <>
             <h4 className="text-danger">Screen B</h4>
-            <div className="mt-3 pb-2 calculator scroll">
-                <div className="px-3 pb-4 upload border-0">
+            <div id="scrollableDiv2" className="mt-3 pb-2 calculator border2">
+                <div className="px-3 upload border-0">
                     <h3 className="pt-3 pb-2">Total results: {resultsCard.length}</h3>
                     <InfiniteScroll
                         dataLength={allResultsCard.length}
                         next={fetchMoreData}
                         hasMore={true}
                         loader={allResultsCard.length === visible ? <SkeletonElement /> : false}
-                        endMessage={
-                            <p style={{ textAlign: 'center' }}>
-                              <b>Yay! You have seen it all</b>
-                            </p>
-                          }
+                        scrollableTarget="scrollableDiv2"
                     >
                         {allResultsCard?.map(item => {
                             return (
@@ -61,17 +58,9 @@ const ResultCards = () => {
                         })}
                     </InfiniteScroll>
                 </div>
-                <div className="pagination px-3 justify-content-center">
-                    <ul className="list-inline">
-                        {[...new Array(8)].map(item => {
-                            return (
-                                <li>
-                                    <span className="white"></span>
-                                </li>
-                            )
-                        })}
-                    </ul>
-                </div>
+                {allResultsCard.length === visible &&
+                    <Paginate />
+                }
             </div>
         </>
     );

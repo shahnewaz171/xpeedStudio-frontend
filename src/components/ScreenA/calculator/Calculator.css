@@ -2,6 +2,10 @@
     border: 2px solid #1a1a1a;
     background: #e6e6e6;
 }
+.calculator.border1,
+.calculator.border2{
+    border-right: 0px ;
+}
 .result-card{
     border: 2px solid #1a1a1a;
     border-radius: 15px;
@@ -19,6 +23,9 @@
     border-radius: 25px;
     cursor: pointer;
 }
+.input-area{
+    border-right: 2px solid #1a1a1a;
+}
 .calculator-btn{
     background-color: #e6e6e6;
     color: #666666;
@@ -27,9 +34,33 @@
 .upload{
     border-bottom: 2px solid #1a1a1a;
 }
-.scroll{
-    /* height: 300px; */
-    /* overflow-y: auto; */
+#scrollableDiv1{
+    height: 405px;
+    overflow-y: auto;
+}
+#scrollableDiv2{
+    height: 500px;
+    overflow-y: auto;
+}
+#scrollableDiv1::-webkit-scrollbar,
+#scrollableDiv2::-webkit-scrollbar {
+    width: 12px;
+}
+#scrollableDiv1::-webkit-scrollbar-track,
+#scrollableDiv2::-webkit-scrollbar-track{
+    background: rgb(90, 89, 89); 
+    margin-left: 10px;
+    z-index: 999;
+}
+#scrollableDiv1::-webkit-scrollbar-thumb,
+#scrollableDiv2::-webkit-scrollbar-thumb {
+    background: #fff; 
+    border-radius: 15px;
+    border: 2px solid rgb(90, 89, 89);
+}
+#scrollableDiv1::-webkit-scrollbar-thumb:hover, 
+#scrollableDiv2::-webkit-scrollbar-thumb:hover{
+    background: #fff; 
 }
 input[type="text"]{
     outline: none;
