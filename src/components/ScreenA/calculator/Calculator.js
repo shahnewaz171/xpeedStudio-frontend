@@ -123,7 +123,7 @@ const Calculator = () => {
                     </div>
                 </div>
                 <div className="col-md-2"></div>
-                <div className="col col-md-5 pt-5">
+                <div className="col col-md-5 pt-5 pt-md-0">
                     <ResultCards />
                 </div>
             </div>
