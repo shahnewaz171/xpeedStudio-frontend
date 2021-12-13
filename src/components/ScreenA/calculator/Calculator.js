@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { FiUploadCloud } from "react-icons/fi";
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
@@ -6,27 +6,18 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Card from '../Card/Card';
 import ResultCards from '../../ScreenB/ResultCards/ResultCards';
 import SkeletonElement from '../../SkeletonElement';
-import './Calculator.css';
 import Paginate from '../../Paginate';
+import { fetchAllResults } from '../../httpRequests';
+import { CreateResultsInfo } from '../../../App';
+import './Calculator.css';
 
 const Calculator = () => {
     const [writtenValue, setWrittenValue] = useState('');
     const [fileValue, setFileValue] = useState('');
     const [file, setFile] = useState('');
-    const [resultsCard, setResultsCard] = useState([]);
+    const [resultsInfo, setResultsInfo] = useContext(CreateResultsInfo);
     const [visible, setVisible] = useState(3);
-    const allResultsCard = resultsCard.slice(0, visible);
-
-    useEffect(() => {
-        axios.get('http://localhost:5000/results')
-            .then(res => {
-               if(res){
-                console.log(res.data);
-                const data = res.data?.reverse();
-                setResultsCard(data);
-               }
-            })
-    }, [])
+    const allResultsInfo = resultsInfo.slice(0, visible);
 
     const writtenText = (e) => {
         const newWrittenValue = { ...writtenValue };
@@ -48,7 +39,7 @@ const Calculator = () => {
     const handleSubmit = (e) => {
         const re = /^[-+]?\d*\.?\d+(?:[-+*/]?\d+)+?$/;
         const formData = new FormData();
-
+        
         if (re.test(fileValue)) {
             const result = eval(fileValue);
 
@@ -65,6 +56,7 @@ const Calculator = () => {
             .then(res => {
                 if (res) {
                     console.log(res);
+                    fetchAllResults(setResultsInfo);
                     e.target.reset();
                 }
             })
@@ -73,19 +65,18 @@ const Calculator = () => {
             alert("Something went wrong. Please check your text file!");
             e.target.reset();
         }
-
         e.preventDefault();
     }
 
     const handleOnDragEnd = (result) => {
         if (!result.destination) return;
 
-        const items = Array.from(resultsCard);
+        const items = Array.from(resultsInfo);
         const [reorderedItem] = items.splice(result.source.index, 1);
         items.splice(result.destination.index, 0, reorderedItem);
         console.log(items);
 
-        setResultsCard(items);
+        setResultsInfo(items);
     }
 
     const fetchMoreData = () => {
@@ -99,32 +90,32 @@ const Calculator = () => {
             <div className="row">
                 <div className="col col-md-5">
                     <h4 className="text-danger">Screen A</h4>
-                    <div className={"mt-3 calculator "+ (resultsCard.length > 3 ? "border1" : "")}>
+                    <div className={"mt-3 calculator "+ (resultsInfo.length > 3 ? "border1" : "")}>
                         <div id="scrollableDiv1" className="px-3 pb-4 upload">
-                            <h3 className="pt-3 pb-2">Total results: {resultsCard.length}</h3>
+                            <h3 className="pt-3 pb-2">Total results: {resultsInfo.length}</h3>
                             <DragDropContext onDragEnd={handleOnDragEnd}>
                                 <Droppable droppableId="items">
                                     {(provided) => (
                                         <div className="items" {...provided.droppableProps} ref={provided.innerRef}>
                                             <InfiniteScroll
-                                                dataLength={resultsCard.length}
+                                                dataLength={resultsInfo.length}
                                                 next={fetchMoreData}
                                                 hasMore={true}
-                                                loader={allResultsCard.length === visible ? <SkeletonElement /> : false}
+                                                loader={allResultsInfo.length === visible ? <SkeletonElement /> : false}
                                                 scrollableTarget="scrollableDiv1"
                                             >
-                                                {allResultsCard.map((item, index) => <Card item={item} index={index} key={item._id} />)}
+                                                {allResultsInfo.map((item, index) => <Card item={item} index={index} key={item._id} />)}
                                                 {provided.placeholder}
                                             </InfiniteScroll>
                                         </div>
                                     )}
                                 </Droppable>
                             </DragDropContext>
-                           {allResultsCard.length === visible && resultsCard.length > 3 ?
+                           {allResultsInfo.length === visible && resultsInfo.length > 3 ?
                                <Paginate /> : ""
                            }
                         </div>
-                        <div className="input-area">
+                        <div className={resultsInfo.length > 3 ? "input-area" : ""}>
                             <h3 className="px-3 py-2">Input</h3>
                             <form className="px-3" onSubmit={handleSubmit}>
                                 <div className="row mb-3">

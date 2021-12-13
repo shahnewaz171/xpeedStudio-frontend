@@ -1,25 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useContext, useState } from 'react';
 import InfiniteScroll from "react-infinite-scroll-component";
 import '../../ScreenA/calculator/Calculator';
 import SkeletonElement from '../../SkeletonElement';
 import Paginate from '../../Paginate';
+import { CreateResultsInfo } from '../../../App';
 
 const ResultCards = () => {
-    const [resultsCard, setResultsCard] = useState([]);
+    const [resultsInfo, setResultsInfo] = useContext(CreateResultsInfo);
     const [visible, setVisible] = useState(3);
-    const allResultsCard = resultsCard.slice(0, visible);
-
-    useEffect(() => {
-        axios.get('http://localhost:5000/results')
-            .then(res => {
-                if(res){
-                    console.log(res.data);
-                    const data = res.data?.reverse();
-                    setResultsCard(data);
-                }
-            })
-    }, [resultsCard])
+    const allResultsInfo = resultsInfo.slice(0, visible);
 
     const fetchMoreData = () => {
         setTimeout(() => {
@@ -31,17 +20,17 @@ const ResultCards = () => {
         <>
             <h4 className="text-danger">Screen B</h4>
             <div>
-                <div id="scrollableDiv2" className={"mt-3 pb-2 calculator "+ ( resultsCard.length > 3 ? "border2" : "")}>
+                <div id="scrollableDiv2" className={"mt-3 pb-2 calculator "+ ( resultsInfo.length > 3 ? "border2" : "")}>
                     <div className="px-3 upload border-0">
-                        <h3 className="pt-3 pb-2">Total results: {resultsCard.length}</h3>
+                        <h3 className="pt-3 pb-2">Total results: {resultsInfo.length}</h3>
                         <InfiniteScroll
-                            dataLength={allResultsCard.length}
+                            dataLength={allResultsInfo.length}
                             next={fetchMoreData}
                             hasMore={true}
-                            loader={allResultsCard.length === visible ? <SkeletonElement /> : false}
+                            loader={allResultsInfo.length === visible ? <SkeletonElement /> : false}
                             scrollableTarget="scrollableDiv2"
                         >
-                            {allResultsCard?.map(item => {
+                            {allResultsInfo?.map(item => {
                                 return (
                                     <div key={item._id} className="mt-1 py-3 mb-4 result-card">
                                         <div className="mb-0 d-flex align-items-center justify-content-around">
@@ -62,7 +51,7 @@ const ResultCards = () => {
                             })}
                         </InfiniteScroll>
                     </div>
-                    {allResultsCard.length === visible && resultsCard.length > 3 ?
+                    {allResultsInfo.length === visible && resultsInfo.length > 3 ?
                          <Paginate /> : ""
                     }
                 </div>
