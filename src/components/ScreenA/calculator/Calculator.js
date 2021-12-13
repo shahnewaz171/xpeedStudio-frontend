@@ -5,17 +5,18 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import InfiniteScroll from "react-infinite-scroll-component";
 import Card from '../Card/Card';
 import ResultCards from '../../ScreenB/ResultCards/ResultCards';
-import SkeletonElement from '../../SkeletonElement';
-import Paginate from '../../Paginate';
-import { fetchAllResults } from '../../httpRequests';
+import SkeletonElement from '../../shared/SkeletonElement';
+import Paginate from '../../shared/Paginate';
+import { fetchAllResults } from '../../shared/httpRequests';
 import { CreateResultsInfo } from '../../../App';
 import './Calculator.css';
+import ResultViewModal from '../../shared/ResultViewModal/ResultViewModal';
 
 const Calculator = () => {
     const [writtenValue, setWrittenValue] = useState('');
     const [fileValue, setFileValue] = useState('');
     const [file, setFile] = useState('');
-    const [resultsInfo, setResultsInfo] = useContext(CreateResultsInfo);
+    const { resultsInfo, setResultsInfo } = useContext(CreateResultsInfo);
     const [visible, setVisible] = useState(3);
     const allResultsInfo = resultsInfo.slice(0, visible);
 
@@ -39,7 +40,7 @@ const Calculator = () => {
     const handleSubmit = (e) => {
         const re = /^[-+]?\d*\.?\d+(?:[-+*/]?\d+)+?$/;
         const formData = new FormData();
-        
+
         if (re.test(fileValue)) {
             const result = eval(fileValue);
 
@@ -48,18 +49,20 @@ const Calculator = () => {
             formData.append('output', result);
             formData.append('file', file);
 
-            axios.post('http://localhost:5000/addCalculation', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-            .then(res => {
-                if (res) {
-                    console.log(res);
-                    fetchAllResults(setResultsInfo);
-                    e.target.reset();
-                }
-            })
+            setTimeout(() => {
+                axios.post('http://localhost:5000/addCalculation', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+                .then(res => {
+                    if (res) {
+                        console.log(res);
+                        fetchAllResults(setResultsInfo);
+                        e.target.reset();
+                    }
+                })
+            }, 15000);
         }
         else {
             alert("Something went wrong. Please check your text file!");
@@ -86,64 +89,69 @@ const Calculator = () => {
     };
 
     return (
-        <div className="my-5 container custom-container">
-            <div className="row">
-                <div className="col col-md-5">
-                    <h4 className="text-danger">Screen A</h4>
-                    <div className={"mt-3 calculator "+ (resultsInfo.length > 3 ? "border1" : "")}>
-                        <div id="scrollableDiv1" className="px-3 pb-4 upload">
-                            <h3 className="pt-3 pb-2">Total results: {resultsInfo.length}</h3>
-                            <DragDropContext onDragEnd={handleOnDragEnd}>
-                                <Droppable droppableId="items">
-                                    {(provided) => (
-                                        <div className="items" {...provided.droppableProps} ref={provided.innerRef}>
-                                            <InfiniteScroll
-                                                dataLength={resultsInfo.length}
-                                                next={fetchMoreData}
-                                                hasMore={true}
-                                                loader={allResultsInfo.length === visible ? <SkeletonElement /> : false}
-                                                scrollableTarget="scrollableDiv1"
-                                            >
-                                                {allResultsInfo.map((item, index) => <Card item={item} index={index} key={item._id} />)}
-                                                {provided.placeholder}
-                                            </InfiniteScroll>
-                                        </div>
-                                    )}
-                                </Droppable>
-                            </DragDropContext>
-                           {allResultsInfo.length === visible && resultsInfo.length > 3 ?
-                               <Paginate /> : ""
-                           }
-                        </div>
-                        <div className={resultsInfo.length > 3 ? "input-area" : ""}>
-                            <h3 className="px-3 py-2">Input</h3>
-                            <form className="px-3" onSubmit={handleSubmit}>
-                                <div className="row mb-3">
-                                    <div className="col-9">
-                                        <input type="text" onBlur={writtenText} name="writtenText" className="form-control" placeholder="Calculation Title" required />
-                                    </div>
-                                </div>
-                                <div className="row pb-2">
-                                    <div className="col-9">
-                                        <div className="file-upload">
-                                            <label htmlFor="file" className="pt-3">
-                                                <FiUploadCloud />
-                                            </label>
-                                            <input type="file" onChange={handleFile} name="file" id="file" className="form-control" accept=".txt" required />
+        <>
+            <div className="my-5 container custom-container">
+                <div className="row">
+                    <div className="col col-md-5">
+                        <h4 className="text-danger">Screen A</h4>
+                        <div className={"mt-3 calculator " + (resultsInfo.length > 3 ? "border1" : "")}>
+                            <div id="scrollableDiv1" className="px-3 pb-4 upload">
+                                <h3 className="pt-3 pb-2">Total results: {resultsInfo.length}</h3>
+                                <DragDropContext onDragEnd={handleOnDragEnd}>
+                                    <Droppable droppableId="items">
+                                        {(provided) => (
+                                            <div className="items" {...provided.droppableProps} ref={provided.innerRef}>
+                                                <InfiniteScroll
+                                                    dataLength={resultsInfo.length}
+                                                    next={fetchMoreData}
+                                                    hasMore={true}
+                                                    loader={allResultsInfo.length === visible ? <SkeletonElement /> : false}
+                                                    scrollableTarget="scrollableDiv1"
+                                                >
+                                                    {allResultsInfo.map((item, index) => <Card item={item} index={index} key={item._id} />)}
+                                                    {provided.placeholder}
+                                                </InfiniteScroll>
+                                            </div>
+                                        )}
+                                    </Droppable>
+                                </DragDropContext>
+                                {allResultsInfo.length === visible && resultsInfo.length > 3 ?
+                                    <Paginate /> : ""
+                                }
+                            </div>
+                            <div className={resultsInfo.length > 3 ? "input-area" : ""}>
+                                <h3 className="px-3 py-2">Input</h3>
+                                <form className="px-3" onSubmit={handleSubmit}>
+                                    <div className="row mb-3">
+                                        <div className="col-9">
+                                            <input type="text" onBlur={writtenText} name="writtenText" className="form-control" placeholder="Calculation Title" required />
                                         </div>
                                     </div>
-                                </div>
-                                <button type="submit" className="btn rounded-pill my-2 px-4 calculator-btn">Calculate</button>
-                            </form>
+                                    <div className="row pb-2">
+                                        <div className="col-9">
+                                            <div className="file-upload">
+                                                <label htmlFor="file" className="pt-3">
+                                                    <FiUploadCloud />
+                                                </label>
+                                                <input type="file" onChange={handleFile} name="file" id="file" className="form-control" accept=".txt" required />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" className="btn rounded-pill my-2 px-4 calculator-btn">Calculate</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className="col-md-2"></div>
-                <div className="col col-md-5 pt-5 pt-md-0">
-                    <ResultCards />
+                    <div className="col-md-2"></div>
+                    <div className="col col-md-5 pt-5 pt-md-0">
+                        <ResultCards />
+                    </div>
                 </div>
             </div>
-        </div>
+            {
+                <ResultViewModal />
+            }
+        </>
     );
 };
 

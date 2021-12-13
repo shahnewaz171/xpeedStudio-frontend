@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
+import { CreateResultsInfo } from '../../../App';
 
 const Card = ({ item, index }) => {
+    const { setIsOpen } = useContext(CreateResultsInfo);
     const { _id, writtenText, output } = item;
 
+    const handleSingleResult = () => {
+        setIsOpen(true);
+    }
     return (
         <>
             <Draggable key={_id} draggableId={_id} index={index}>
@@ -20,7 +25,7 @@ const Card = ({ item, index }) => {
                                     <p className="fw-bolder mb-0">{writtenText}</p>
                                 </div>
                                 <div className="col-md-4">
-                                    <p className="preview-btn mb-0">See Input</p>
+                                    <p onClick={handleSingleResult} className="preview-btn mb-0">See Input</p>
                                 </div>
                             </div>
                         </div>

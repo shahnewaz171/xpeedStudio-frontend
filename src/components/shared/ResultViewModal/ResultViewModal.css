@@ -1,0 +1,25 @@
+.resultViewModal{
+    width: 63vw;
+    height: auto;
+    overflow-y: auto !important;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    border-radius: 1em;
+    margin-right: -50%;
+    transform: translate(-50%,-50%);
+    background-color: #fff;
+    position: absolute;
+    padding: 18px 12px !important;
+}
+.resultViewOverlay{
+    position: fixed;
+    inset: 0;
+    /* backdrop-filter: blur(2px) !important; */
+    z-index: 99999;
+    background-color: rgba(0,0,0,0.5) !important;
+}
+.resultViewModal .quickView .row{
+    --bs-gutter-x: 0px !important;
+}

@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react';
 import InfiniteScroll from "react-infinite-scroll-component";
 import '../../ScreenA/calculator/Calculator';
-import SkeletonElement from '../../SkeletonElement';
-import Paginate from '../../Paginate';
+import SkeletonElement from '../../shared/SkeletonElement';
+import Paginate from '../../shared/Paginate';
 import { CreateResultsInfo } from '../../../App';
 
 const ResultCards = () => {
-    const [resultsInfo, setResultsInfo] = useContext(CreateResultsInfo);
+    const { resultsInfo } = useContext(CreateResultsInfo);
     const [visible, setVisible] = useState(3);
     const allResultsInfo = resultsInfo.slice(0, visible);
 
