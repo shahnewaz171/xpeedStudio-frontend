@@ -1,45 +1,56 @@
 import React, { useState } from 'react';
-import fs from 'fs';
+import axios from 'axios';
 import './Calculator.css';
 
 const Calculator = () => {
-    const [textValue, setTextValue] = useState('');
+    const [writtenValue, setWrittenValue] = useState('');
     const [fileValue, setFileValue] = useState('');
-    const [result, setResult] = useState('');
+    const [file, setFile] = useState('');
 
     const writtenText = (e) => {
-        const newTextValue = { ...textValue };
-        newTextValue[e.target.name] = e.target.value;
-        setTextValue(newTextValue.text);
+        const newWrittenValue = { ...writtenValue };
+        newWrittenValue[e.target.name] = e.target.value;
+        setWrittenValue(newWrittenValue.writtenText);
     }
 
     const handleFile = (e) => {
-        console.log(e.target.files[0]);
+        setFile(e.target.files[0]);
         const reader = new FileReader();
           reader.onload = function() {
             const text = reader.result;
-            console.log(text);
-            console.log(__dirname);
-            // fs.appendFile('mynewfile1.txt', 'Hello content!', function (err) {
-            //     if (err) throw err;
-            //     console.log('Saved!');
-            // });
-            // console.log(eval(text));
+            const newTextValue = text.replace(/\s/g, '');
+            setFileValue(newTextValue);
         };
         reader.readAsText(e.target.files[0]);
     }
 
     const handleSubmit = (e) => {
         const re = /^[-+]?\d*\.?\d+(?:[-+*/]?\d+)+?$/;
-        const newTextValue = textValue.replace(/\s/g, '');
+        const formData = new FormData();
 
-        if (re.test(newTextValue)) {
-            const result = eval(newTextValue);
-            console.log(newTextValue);
-            console.log(result);
+        if (re.test(fileValue)) {
+            const result = eval(fileValue);
+           
+            formData.append('writtenText', writtenValue);
+            formData.append('fileValue', fileValue);
+            formData.append('output', result);
+            formData.append('file', file);
+            
+            axios.post('http://localhost:5000/addCalculation', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(res => {
+                if(res){
+                    console.log(res);
+                    e.target.reset();
+                }
+            })
         }
         else {
-            console.log("Something went wrong!");
+            alert("Something went wrong. Please check your text file!");
+            e.target.reset();
         }
 
         e.preventDefault();
@@ -66,7 +77,7 @@ const Calculator = () => {
                             <form className="px-3" onSubmit={handleSubmit}>
                                 <div className="row mb-3">
                                     <div className="col-9">
-                                        <input type="text" onBlur={writtenText} name="text" className="form-control" placeholder="Calculation Title" required />
+                                        <input type="text" onBlur={writtenText} name="writtenText" className="form-control" placeholder="Calculation Title" required />
                                     </div>
                                     <div className="col-3 d-flex align-items-center">
                                         <p className="text-dark mb-0 text-center">Required</p>
@@ -74,7 +85,7 @@ const Calculator = () => {
                                 </div>
                                 <div className="row pb-4">
                                     <div className="col-9">
-                                        <input type="file" onChange={handleFile} name="file" className="form-control" accept=".txt" />
+                                        <input type="file" onChange={handleFile} name="file" className="form-control" accept=".txt" required />
                                     </div>
                                     <div className="col-3 d-flex align-items-center">
                                         <p className="text-dark mb-0 text-center">Optional</p>
