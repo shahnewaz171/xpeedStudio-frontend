@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import InfiniteScroll from "react-infinite-scroll-component";
-import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
 import '../../ScreenA/calculator/Calculator';
+import SkeletonElement from '../../SkeletonElement';
 
 const ResultCards = () => {
     const [resultsCard, setResultsCard] = useState([]);
@@ -19,11 +18,9 @@ const ResultCards = () => {
     }, [])
 
     const fetchMoreData = () => {
-        // a fake async api call like which sends
-        // 20 more records in 1.5 secs
         setTimeout(() => {
-            setVisible(previousLeague => previousLeague + 3);
-        }, 1500);
+            setVisible(previousItems => previousItems + 3);
+        }, 1000);
     };
 
     return (
@@ -33,10 +30,15 @@ const ResultCards = () => {
                 <div className="px-3 pb-4 upload border-0">
                     <h3 className="pt-3 pb-2">Total results: {resultsCard.length}</h3>
                     <InfiniteScroll
-                    dataLength={resultsCard.length}
-                    next={fetchMoreData}
-                    hasMore={true}
-                    loader={<h4>Loading...</h4>}
+                        dataLength={allResultsCard.length}
+                        next={fetchMoreData}
+                        hasMore={true}
+                        loader={allResultsCard.length === visible ? <SkeletonElement /> : false}
+                        endMessage={
+                            <p style={{ textAlign: 'center' }}>
+                              <b>Yay! You have seen it all</b>
+                            </p>
+                          }
                     >
                         {allResultsCard?.map(item => {
                             return (
