@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FiUploadCloud } from "react-icons/fi";
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import './Calculator.css';
+import Card from '../Card/Card';
 
 const Calculator = () => {
     const [writtenValue, setWrittenValue] = useState('');
@@ -11,10 +13,10 @@ const Calculator = () => {
 
     useEffect(() => {
         axios.get('http://localhost:5000/results')
-        .then(res => {
-            console.log(res.data);
-            setResultsCard(res.data);
-        })
+            .then(res => {
+                console.log(res.data);
+                setResultsCard(res.data);
+            })
     }, [])
 
     const writtenText = (e) => {
@@ -26,7 +28,7 @@ const Calculator = () => {
     const handleFile = (e) => {
         setFile(e.target.files[0]);
         const reader = new FileReader();
-          reader.onload = function() {
+        reader.onload = function () {
             const text = reader.result;
             const newTextValue = text.replace(/\s/g, '');
             setFileValue(newTextValue);
@@ -40,23 +42,23 @@ const Calculator = () => {
 
         if (re.test(fileValue)) {
             const result = eval(fileValue);
-           
+
             formData.append('writtenText', writtenValue);
             formData.append('fileValue', fileValue);
             formData.append('output', result);
             formData.append('file', file);
-            
+
             axios.post('http://localhost:5000/addCalculation', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
-            .then(res => {
-                if(res){
-                    console.log(res);
-                    e.target.reset();
-                }
-            })
+                .then(res => {
+                    if (res) {
+                        console.log(res);
+                        e.target.reset();
+                    }
+                })
         }
         else {
             alert("Something went wrong. Please check your text file!");
@@ -66,35 +68,37 @@ const Calculator = () => {
         e.preventDefault();
     }
 
+   const handleOnDragEnd = (result) => {
+        if (!result.destination) return;
+    
+        const items = Array.from(resultsCard);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+        console.log(items);
+    
+        setResultsCard(items);
+      }
+
     return (
         <div className="my-5 container custom-container">
             <h4 className="text-danger">Screen A</h4>
             <div className="row">
                 <div className="col col-md-6">
                     <div className="mt-3 pb-2 calculator">
-                        <div className="px-3 pb-4">
-                            <h3 className="pt-3 pb-2">Total results: 03</h3>
-                            {resultsCard?.map(item => {
-                                return (
-                                    <div key={item._id} className="mt-1 py-3 mb-4 rounded-3 result-card">
-                                        <div className="mb-0 d-flex align-items-center">
-                                            <div className="col-md-3">
-                                                <p className="ps-3 mb-0">
-                                                    = <span >{item.output}</span>
-                                                </p>
-                                            </div>
-                                            <div className="col-md-6">
-                                                <p className="fw-bolder mb-0">{item.writtenText}</p>
-                                            </div>
-                                            <div className="col-md-3">
-                                                <p className="preview-btn mb-0">See Input</p>
-                                            </div>
+                        <div className="px-3 pb-4 upload">
+                            <h3 className="pt-3 pb-2">Total results: {resultsCard.length}</h3>
+                            <DragDropContext onDragEnd={handleOnDragEnd}>
+                                <Droppable droppableId="items">
+                                    {(provided) => (
+                                        <div className="items" {...provided.droppableProps} ref={provided.innerRef}>
+                                            {resultsCard.map((item, index) => <Card item={item} index={index} key={item._id} /> )}
+                                            {provided.placeholder}
                                         </div>
-                                    </div>
-                                )
-                            })}
+                                    )}
+                                </Droppable>
+                            </DragDropContext>
                         </div>
-                        <div className="mt-2 upload">
+                        <div className="mt-2">
                             <h3 className="px-3 py-2">Input</h3>
                             <form className="px-3" onSubmit={handleSubmit}>
                                 <div className="row mb-3">
