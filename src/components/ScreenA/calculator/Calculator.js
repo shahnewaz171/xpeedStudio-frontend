@@ -20,8 +20,11 @@ const Calculator = () => {
     useEffect(() => {
         axios.get('http://localhost:5000/results')
             .then(res => {
+               if(res){
                 console.log(res.data);
-                setResultsCard(res.data);
+                const data = res.data?.reverse();
+                setResultsCard(data);
+               }
             })
     }, [])
 
@@ -59,12 +62,12 @@ const Calculator = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             })
-                .then(res => {
-                    if (res) {
-                        console.log(res);
-                        e.target.reset();
-                    }
-                })
+            .then(res => {
+                if (res) {
+                    console.log(res);
+                    e.target.reset();
+                }
+            })
         }
         else {
             alert("Something went wrong. Please check your text file!");
@@ -96,7 +99,7 @@ const Calculator = () => {
             <div className="row">
                 <div className="col col-md-5">
                     <h4 className="text-danger">Screen A</h4>
-                    <div className="mt-3 calculator border1">
+                    <div className={"mt-3 calculator "+ (resultsCard.length > 3 ? "border1" : "")}>
                         <div id="scrollableDiv1" className="px-3 pb-4 upload">
                             <h3 className="pt-3 pb-2">Total results: {resultsCard.length}</h3>
                             <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -104,20 +107,21 @@ const Calculator = () => {
                                     {(provided) => (
                                         <div className="items" {...provided.droppableProps} ref={provided.innerRef}>
                                             <InfiniteScroll
-                                                dataLength={allResultsCard.length}
+                                                dataLength={resultsCard.length}
                                                 next={fetchMoreData}
                                                 hasMore={true}
                                                 loader={allResultsCard.length === visible ? <SkeletonElement /> : false}
                                                 scrollableTarget="scrollableDiv1"
                                             >
                                                 {allResultsCard.map((item, index) => <Card item={item} index={index} key={item._id} />)}
+                                                {provided.placeholder}
                                             </InfiniteScroll>
                                         </div>
                                     )}
                                 </Droppable>
                             </DragDropContext>
-                           {allResultsCard.length === visible &&
-                               <Paginate />
+                           {allResultsCard.length === visible && resultsCard.length > 3 ?
+                               <Paginate /> : ""
                            }
                         </div>
                         <div className="input-area">

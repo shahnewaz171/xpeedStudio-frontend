@@ -34,14 +34,15 @@
 .upload{
     border-bottom: 2px solid #1a1a1a;
 }
-#scrollableDiv1{
+#scrollableDiv1,
+#scrollableDiv2{
     height: 405px;
     overflow-y: auto;
 }
-#scrollableDiv2{
+/* #scrollableDiv2{
     height: 500px;
     overflow-y: auto;
-}
+} */
 #scrollableDiv1::-webkit-scrollbar,
 #scrollableDiv2::-webkit-scrollbar {
     width: 12px;
