@@ -18,7 +18,7 @@ const ResultCards = ({ handleSingleResult }) => {
 
     return (
         <>
-            <h4 className="text-danger">Screen B</h4>
+            <h4 className="pb-3 text-danger screen-title">Screen B</h4>
             <div>
                 <div id="scrollableDiv2" className={"mt-3 pb-2 calculator "+ ( resultsInfo.length > 3 ? "border2" : "")}>
                     <div className="px-3 upload border-0">

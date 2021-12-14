@@ -1,9 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import { CreateResultsInfo } from '../../../App';
 
 const Card = ({ item, index, handleSingleResult }) => {
-    const { setIsOpen } = useContext(CreateResultsInfo);
     const { _id, writtenText, output } = item;
 
     return (

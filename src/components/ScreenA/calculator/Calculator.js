@@ -112,7 +112,7 @@ const Calculator = () => {
             <div className="my-5 container custom-container">
                 <div className="row">
                     <div className="col col-md-5">
-                        <h4 className="text-danger">Screen A</h4>
+                        <h4 className="pb-3 text-danger screen-title">Screen A</h4>
                         <div className={"mt-3 calculator " + (resultsInfo.length > 3 ? "border1" : "")}>
                             <div id="scrollableDiv1" className="px-3 pb-4 upload">
                                 <h3 className="pt-3 pb-2">Total results: {resultsInfo.length}</h3>
@@ -161,6 +161,7 @@ const Calculator = () => {
                             </div>
                         </div>
                     </div>
+                    
                     <div className="col-md-2"></div>
                     <div className="col col-md-5 pt-5 pt-md-0">
                         <ResultCards handleSingleResult={handleSingleResult} />

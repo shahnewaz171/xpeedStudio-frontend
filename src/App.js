@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Calculator from './components/ScreenA/calculator/Calculator';
 import { fetchAllResults } from './components/shared/httpRequests';
 import './App.css';
+import Loading from './components/shared/Loading';
 export const CreateResultsInfo = createContext();
 
 function App() {
@@ -21,9 +22,12 @@ function App() {
       >
         <Router>
           <Switch>
-            <Route exact path="/">
-              <Calculator />
-            </Route>
+            {resultsInfo.length ? 
+              <Route exact path="/">
+                <Calculator />
+              </Route>
+              : <Loading />
+            }
           </Switch>
         </Router>
       </CreateResultsInfo.Provider>
