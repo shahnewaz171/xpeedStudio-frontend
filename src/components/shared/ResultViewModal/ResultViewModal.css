@@ -1,7 +1,6 @@
 .resultViewModal{
     width: 63vw;
     height: auto;
-    overflow-y: auto !important;
     top: 50%;
     left: 50%;
     right: auto;
@@ -22,4 +21,34 @@
 }
 .resultViewModal .quickView .row{
     --bs-gutter-x: 0px !important;
+}
+.resultViewModal .quickView .title{
+    font-weight: 600;
+    font-size: 18px;
+}
+.resultViewModal .quickView p{
+    font-size: 17px;
+}
+.resultViewModal .close-btn{
+    position: absolute;
+    top: -20px;
+    right: -18px;
+    border-radius: 50% !important;
+    font-weight: 600;
+}
+
+/* Media Query */
+@media screen and (max-width: 991px){
+    .resultViewOverlay .resultViewModal{
+        width: 85vw;
+        padding: 18px 16px !important;
+    }
+    .resultViewOverlay .resultViewModal .quickView{
+        overflow-y: auto;
+    }
+}
+@media screen and (max-width: 767px){
+    .resultViewOverlay .resultViewModal{
+        width: 90vw;
+    }
 }

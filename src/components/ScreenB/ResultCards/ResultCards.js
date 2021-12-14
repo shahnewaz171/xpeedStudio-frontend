@@ -5,7 +5,7 @@ import SkeletonElement from '../../shared/SkeletonElement';
 import Paginate from '../../shared/Paginate';
 import { CreateResultsInfo } from '../../../App';
 
-const ResultCards = () => {
+const ResultCards = ({ handleSingleResult }) => {
     const { resultsInfo } = useContext(CreateResultsInfo);
     const [visible, setVisible] = useState(3);
     const allResultsInfo = resultsInfo.slice(0, visible);
@@ -43,7 +43,7 @@ const ResultCards = () => {
                                                 <p className="fw-bolder mb-0">{item.writtenText}</p>
                                             </div>
                                             <div className="col-md-4">
-                                                <p className="preview-btn mb-0">See Input</p>
+                                                <p onClick={() => handleSingleResult(item)} className="preview-btn mb-0">See Input</p>
                                             </div>
                                         </div>
                                     </div>

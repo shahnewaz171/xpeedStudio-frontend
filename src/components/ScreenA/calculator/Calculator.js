@@ -16,8 +16,9 @@ const Calculator = () => {
     const [writtenValue, setWrittenValue] = useState('');
     const [fileValue, setFileValue] = useState('');
     const [file, setFile] = useState('');
-    const { resultsInfo, setResultsInfo } = useContext(CreateResultsInfo);
+    const { resultsInfo, setResultsInfo, setIsOpen } = useContext(CreateResultsInfo);
     const [visible, setVisible] = useState(3);
+    const [singleResult, setSingleResult] = useState('');
     const allResultsInfo = resultsInfo.slice(0, visible);
 
     const writtenText = (e) => {
@@ -88,6 +89,11 @@ const Calculator = () => {
         }, 1000);
     };
 
+    const handleSingleResult = (data) => {
+        setSingleResult(data);
+        setIsOpen(true);
+    }
+
     return (
         <>
             <div className="my-5 container custom-container">
@@ -108,7 +114,7 @@ const Calculator = () => {
                                                     loader={allResultsInfo.length === visible ? <SkeletonElement /> : false}
                                                     scrollableTarget="scrollableDiv1"
                                                 >
-                                                    {allResultsInfo.map((item, index) => <Card item={item} index={index} key={item._id} />)}
+                                                    {allResultsInfo.map((item, index) => <Card item={item} index={index} key={item._id} handleSingleResult={handleSingleResult} />)}
                                                     {provided.placeholder}
                                                 </InfiniteScroll>
                                             </div>
@@ -144,12 +150,12 @@ const Calculator = () => {
                     </div>
                     <div className="col-md-2"></div>
                     <div className="col col-md-5 pt-5 pt-md-0">
-                        <ResultCards />
+                        <ResultCards handleSingleResult={handleSingleResult} />
                     </div>
                 </div>
             </div>
             {
-                <ResultViewModal />
+                <ResultViewModal singleResult={singleResult} />
             }
         </>
     );
