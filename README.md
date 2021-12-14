@@ -1,8 +1,6 @@
 ## xPeedStudio-frontend [`Live`](https://calculator-mern.netlify.app)
 
-This is a [React.js](https://reactjs.org/) project bootstrapped with [`create-react-app`](https://github.com/facebook/create-react-app).
-
-## Getting Started
+## Run Server
 
 First, run the development server:
 
