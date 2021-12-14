@@ -1,11 +1,11 @@
 import React, { useContext, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { FiUploadCloud } from "react-icons/fi";
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import InfiniteScroll from "react-infinite-scroll-component";
 import { ToastContainer, toast } from 'react-toastify';
 import Card from '../Card/Card';
-import ResultCards from '../ResultCards/ResultCards';
 import SkeletonElement from '../../shared/SkeletonElement';
 import Paginate from '../../shared/Paginate';
 import { fetchAllResults } from '../../shared/httpRequests';
@@ -18,9 +18,8 @@ const Calculator = () => {
     const [writtenValue, setWrittenValue] = useState('');
     const [fileValue, setFileValue] = useState('');
     const [file, setFile] = useState('');
-    const { resultsInfo, setResultsInfo, setIsOpen } = useContext(CreateResultsInfo);
+    const { resultsInfo, setResultsInfo, singleResult,  handleSingleResult } = useContext(CreateResultsInfo);
     const [visible, setVisible] = useState(3);
-    const [singleResult, setSingleResult] = useState('');
     const [disable, setDisable] = useState(false);
     const toastId = useRef(null);
     const allResultsInfo = resultsInfo.slice(0, visible);
@@ -102,20 +101,21 @@ const Calculator = () => {
         }, 1000);
     };
 
-    const handleSingleResult = (data) => {
-        setSingleResult(data);
-        setIsOpen(true);
-    }
-
     return (
         <>
-            <div className="my-5 container custom-container">
-                <div className="row">
-                    <div className="col col-md-5">
-                        <h4 className="pb-3 text-danger screen-title">Screen A</h4>
+            <div className="mb-5 mt-2 container custom-container">
+                <div className="row justify-content-center">
+                    <div className="col-md-6">
                         <div className={"mt-3 calculator " + (resultsInfo.length > 3 ? "border1" : "")}>
                             <div id="scrollableDiv1" className="px-3 pb-4 upload">
-                                <h3 className="pt-3 pb-2">Total results: {resultsInfo.length}</h3>
+                                <div className="row">
+                                    <div className="col-6">
+                                        <h3 className="pt-3 pb-2">Total results: {resultsInfo.length}</h3>
+                                    </div>
+                                    <div className="col-6 text-end">
+                                        <Link to="/allResults" className="btn mt-3 allResults-btn">All Results</Link>
+                                    </div>
+                                </div>
                                 <DragDropContext onDragEnd={handleOnDragEnd}>
                                     <Droppable droppableId="items">
                                         {(provided) => (
@@ -160,11 +160,6 @@ const Calculator = () => {
                                 </form>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div className="col-md-2"></div>
-                    <div className="col col-md-5 pt-5 pt-md-0">
-                        <ResultCards handleSingleResult={handleSingleResult} />
                     </div>
                 </div>
             </div>

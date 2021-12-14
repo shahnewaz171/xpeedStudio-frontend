@@ -4,9 +4,10 @@ import '../calculator/Calculator';
 import SkeletonElement from '../../shared/SkeletonElement';
 import Paginate from '../../shared/Paginate';
 import { CreateResultsInfo } from '../../../App';
+import ResultViewModal from '../../shared/ResultViewModal/ResultViewModal';
 
-const ResultCards = ({ handleSingleResult }) => {
-    const { resultsInfo } = useContext(CreateResultsInfo);
+const ResultCards = () => {
+    const { resultsInfo, singleResult, handleSingleResult } = useContext(CreateResultsInfo);
     const [visible, setVisible] = useState(3);
     const allResultsInfo = resultsInfo.slice(0, visible);
 
@@ -18,7 +19,6 @@ const ResultCards = ({ handleSingleResult }) => {
 
     return (
         <>
-            <h4 className="pb-3 text-danger screen-title">Screen B</h4>
             <div>
                 <div id="scrollableDiv2" className={"mt-3 pb-2 calculator "+ ( resultsInfo.length > 3 ? "border2" : "")}>
                     <div className="px-3 upload border-0">
@@ -56,6 +56,9 @@ const ResultCards = ({ handleSingleResult }) => {
                     }
                 </div>
             </div>
+            {
+                <ResultViewModal singleResult={singleResult} />
+            }
         </>
     );
 };

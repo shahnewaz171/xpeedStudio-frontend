@@ -5,27 +5,39 @@ import Calculator from './components/Home/calculator/Calculator';
 import { fetchAllResults } from './components/shared/httpRequests';
 import Loading from './components/shared/Loading';
 import './App.css';
+import AllCards from './components/Home/AllCards/AllCards';
 export const CreateResultsInfo = createContext();
 
 function App() {
   const [resultsInfo, setResultsInfo] = useState([]);
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [singleResult, setSingleResult] = useState('');
 
   useEffect(() => {
     fetchAllResults(setResultsInfo);
   }, []);
 
+  const handleSingleResult = (data) => {
+    setSingleResult(data);
+    setIsOpen(true);
+}
+
   return (
     <>
       <CreateResultsInfo.Provider 
-        value={{ resultsInfo, setResultsInfo, modalIsOpen,  setIsOpen}}
+        value={{ resultsInfo, setResultsInfo, modalIsOpen,  setIsOpen, singleResult,  handleSingleResult }}
       >
         <Router>
           <Switch>
             {resultsInfo.length ? 
-              <Route exact path="/">
-                <Calculator />
-              </Route>
+              <>
+                <Route exact path="/">
+                  <Calculator />
+                </Route>
+                <Route path="/allResults">
+                  <AllCards />
+                </Route>
+                </>
               : <Loading />
             }
           </Switch>

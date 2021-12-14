@@ -14,21 +14,30 @@
     border-radius: 15px;
     background: #e6e6e6;
 }
-.result-card .preview-btn{
+.result-card .preview-btn,
+.allResults-btn{
     background-color: rgb(90, 89, 89);
     color: #fff;
     font-size: 14px;
-    height: 36px;
     display: inline-block;
-    line-height: 34px;
     width: 115px;
     text-align: center;
-    border-radius: 25px;
     border: 2px solid rgb(90, 89, 89);
     cursor: pointer;
     transition: .3s ease-in;
 }
-.result-card .preview-btn:hover{
+.result-card .preview-btn{
+    height: 36px;
+    line-height: 34px;
+    border-radius: 25px;
+}
+.allResults-btn{
+    height: 40px;
+    line-height: 23px;
+    border-radius: 10px;
+}
+.result-card .preview-btn:hover,
+.allResults-btn:hover{
     background-color: #e6e6e6;
     color: #000;
 }
