@@ -5,7 +5,7 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import InfiniteScroll from "react-infinite-scroll-component";
 import { ToastContainer, toast } from 'react-toastify';
 import Card from '../Card/Card';
-import ResultCards from '../../ScreenB/ResultCards/ResultCards';
+import ResultCards from '../ResultCards/ResultCards';
 import SkeletonElement from '../../shared/SkeletonElement';
 import Paginate from '../../shared/Paginate';
 import { fetchAllResults } from '../../shared/httpRequests';

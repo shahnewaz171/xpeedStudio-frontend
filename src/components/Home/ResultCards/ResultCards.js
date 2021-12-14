@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import InfiniteScroll from "react-infinite-scroll-component";
-import '../../ScreenA/calculator/Calculator';
+import '../calculator/Calculator';
 import SkeletonElement from '../../shared/SkeletonElement';
 import Paginate from '../../shared/Paginate';
 import { CreateResultsInfo } from '../../../App';
