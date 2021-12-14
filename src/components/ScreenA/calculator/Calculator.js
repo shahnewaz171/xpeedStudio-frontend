@@ -64,6 +64,11 @@ const Calculator = () => {
                     if (res) {
                         fetchAllResults(setResultsInfo);
                         setDisable(false);
+                        toast.success("Success!", {
+                            theme: "dark",
+                            position: toast.POSITION.TOP_LEFT,
+                            autoClose: 3000
+                        });
                         e.target.reset();
                     }
                 })
@@ -73,7 +78,9 @@ const Calculator = () => {
         else {
             toast.dismiss(toastId.current);
             toast.error("You did put the wrong input. Please check your text file!", {
-                theme: "dark"
+                theme: "dark",
+                position: toast.POSITION.TOP_LEFT,
+                autoClose: 8000
             });
             e.target.reset();
         }
@@ -164,7 +171,7 @@ const Calculator = () => {
                 <ResultViewModal singleResult={singleResult} />
             }
             {
-                <ToastContainer position="top-left" autoClose={8000} />
+                <ToastContainer />
             }
         </>
     );
