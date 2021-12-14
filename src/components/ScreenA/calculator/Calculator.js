@@ -1,16 +1,18 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import axios from 'axios';
 import { FiUploadCloud } from "react-icons/fi";
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import InfiniteScroll from "react-infinite-scroll-component";
+import { ToastContainer, toast } from 'react-toastify';
 import Card from '../Card/Card';
 import ResultCards from '../../ScreenB/ResultCards/ResultCards';
 import SkeletonElement from '../../shared/SkeletonElement';
 import Paginate from '../../shared/Paginate';
 import { fetchAllResults } from '../../shared/httpRequests';
 import { CreateResultsInfo } from '../../../App';
-import './Calculator.css';
 import ResultViewModal from '../../shared/ResultViewModal/ResultViewModal';
+import 'react-toastify/dist/ReactToastify.css';
+import './Calculator.css';
 
 const Calculator = () => {
     const [writtenValue, setWrittenValue] = useState('');
@@ -19,6 +21,7 @@ const Calculator = () => {
     const { resultsInfo, setResultsInfo, setIsOpen } = useContext(CreateResultsInfo);
     const [visible, setVisible] = useState(3);
     const [singleResult, setSingleResult] = useState('');
+    const toastId = useRef(null);
     const allResultsInfo = resultsInfo.slice(0, visible);
 
     const writtenText = (e) => {
@@ -66,7 +69,10 @@ const Calculator = () => {
             }, 15000);
         }
         else {
-            alert("Something went wrong. Please check your text file!");
+            toast.dismiss(toastId.current);
+            toast.error("You did put the wrong input. Please check your text file!", {
+                theme: "dark"
+            });
             e.target.reset();
         }
         e.preventDefault();
@@ -74,12 +80,10 @@ const Calculator = () => {
 
     const handleOnDragEnd = (result) => {
         if (!result.destination) return;
-
+        
         const items = Array.from(resultsInfo);
         const [reorderedItem] = items.splice(result.source.index, 1);
         items.splice(result.destination.index, 0, reorderedItem);
-        console.log(items);
-
         setResultsInfo(items);
     }
 
@@ -156,6 +160,9 @@ const Calculator = () => {
             </div>
             {
                 <ResultViewModal singleResult={singleResult} />
+            }
+            {
+                <ToastContainer position="top-left" autoClose={8000} />
             }
         </>
     );
