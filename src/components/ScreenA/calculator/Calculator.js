@@ -21,6 +21,7 @@ const Calculator = () => {
     const { resultsInfo, setResultsInfo, setIsOpen } = useContext(CreateResultsInfo);
     const [visible, setVisible] = useState(3);
     const [singleResult, setSingleResult] = useState('');
+    const [disable, setDisable] = useState(false);
     const toastId = useRef(null);
     const allResultsInfo = resultsInfo.slice(0, visible);
 
@@ -61,12 +62,13 @@ const Calculator = () => {
                 })
                 .then(res => {
                     if (res) {
-                        console.log(res);
                         fetchAllResults(setResultsInfo);
+                        setDisable(false);
                         e.target.reset();
                     }
                 })
             }, 15000);
+            setDisable(true);
         }
         else {
             toast.dismiss(toastId.current);
@@ -80,7 +82,7 @@ const Calculator = () => {
 
     const handleOnDragEnd = (result) => {
         if (!result.destination) return;
-        
+
         const items = Array.from(resultsInfo);
         const [reorderedItem] = items.splice(result.source.index, 1);
         items.splice(result.destination.index, 0, reorderedItem);
@@ -147,7 +149,7 @@ const Calculator = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="submit" className="btn rounded-pill my-2 px-4 calculator-btn">Calculate</button>
+                                    <button disabled={disable} type="submit" className="btn rounded-pill my-2 px-4 calculator-btn">{disable ? "Calculating, Please wait" : "Calculate"}</button>
                                 </form>
                             </div>
                         </div>
