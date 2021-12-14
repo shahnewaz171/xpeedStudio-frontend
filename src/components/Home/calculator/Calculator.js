@@ -55,7 +55,7 @@ const Calculator = () => {
             formData.append('file', file);
 
             setTimeout(() => {
-                axios.post('http://localhost:5000/addCalculation', formData, {
+                axios.post('https://sheltered-forest-00893.herokuapp.com/addCalculation', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
